@@ -1,5 +1,5 @@
 # USB WiFi Keylogger
- *The WiFi enabled USB Keylogger*
+ *A WiFi enabled USB Keylogger and Keystroke injection tool*
 
 # Table of Contentiousness
 - [About](#about)
