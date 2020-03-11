@@ -1,7 +1,7 @@
 # USB WiFi Keylogger
  *The WiFi enabled USB Keylogger*
 
-# Table of Confidence
+# Table of Contentiousness
 - [About](#about)
 
 # About
