@@ -1,0 +1,93 @@
+<!Doctype html>
+<title>Master Key</title>
+<html>
+	<font face="verdana">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="style.css">
+		<script src="functions.js"></script>
+	</head>
+	
+	<!-- Menu bar -->
+	<div class="topnav">
+		<a href="/">Key Log</a>
+		<a href="index.html">Scripts</a>
+		<a href="live.html">Live Execute</a>
+		<a href="settings.html">Settings</a>
+		<div class="topnav-right">
+			<a href="info.html">About</a>
+		</div>
+	</div>
+	
+	<body>
+		<div id="error"></div>
+		<div class="column">
+			<h1 class="header" data-translate="scripts">Scripts</h1>
+			<p id="memory">
+				<input type="submit" id="submit" onclick="format()" value="format">
+				<meter id="memoryGraph" value="" max="1" min="0"></meter> 
+				<span id="memorySize">0 / 3MB</span>
+			</p>
+			
+			<table id="scriptlist">
+				<tr>
+					<th>Name</th>
+					<th>Size</th>
+					<th>Run</th>
+				</tr>
+			</table>
+			
+			<form action="/upload" method="POST" enctype="multipart/form-data">
+				<input type='file' name='update'>
+				<div style='float: right'>
+					<input style='margin: auto' type="submit" id="submit" value="upload new script">
+				</div>
+			</form>
+		</div>
+		
+		<script>
+			var res;
+			var table = document.getElementById("scriptlist");
+			var memoryGraph = document.getElementById("memoryGraph");
+			var memorySize = document.getElementById("memorySize");
+			
+			function loadlist(){
+				getResponse("list.json",function(responseText){
+					res = JSON.parse(responseText);
+					
+					memoryGraph.value = res.usedBytes;
+					memoryGraph.max = res.totalBytes;
+					
+					res.usedBytes = parseInt(res.usedBytes/1000);
+					res.totalBytes = parseInt(res.totalBytes/1000);
+					
+					memorySize.innerHTML = res.usedBytes+" / "+res.totalBytes+"KB ("+(res.totalBytes-res.usedBytes)+"KB available)";
+					
+					var tableHTML = "<tr><th>Name</th><th>Size</th><th>Run</th></tr>";
+					for(var i=0;i<res.list.length;i++){
+						tableHTML += "<tr>";
+						tableHTML += "<td><a href='view.html?script="+res.list[i].n+"'>"+res.list[i].n+"</a></td>";
+						tableHTML += "<td>"+res.list[i].s+"</td>";
+						tableHTML += "<td><button class='selectBtn' onclick='run("+i+")'>run</button></td>";
+						tableHTML += "</tr>";
+					}
+					table.innerHTML = tableHTML;
+				});
+			}
+			
+			loadlist();
+			
+			function run(i){
+				getResponse("run?name="+res.list[i].n,function(responseText){
+					console.log(responseText);
+				},undefined,undefined,"POST");
+			}
+			
+			function format(){
+				getResponse("format",function(responseText){
+					loadlist();
+				});
+			}
+		</script>
+	</body>
+</html>

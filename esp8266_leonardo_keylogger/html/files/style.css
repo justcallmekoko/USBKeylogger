@@ -1,0 +1,165 @@
+#submit {
+	background-color: #c10000;
+	padding: .5em;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 6px;
+	color: #000000;
+	font-family: 'verdana';
+	font-size: 20px;
+	text-decoration: none;
+	border: none;
+}
+#submit:hover {
+	border: none;
+	background: cyan;
+	box-shadow: 0px 0px 1px #777;
+	color: black;
+}
+
+#memoryGraph{
+	width: 12rem;
+}
+
+#scriptTextArea{
+	width:100%;
+	height:20rem;
+}
+
+table{
+	width: 100%;
+	margin-bottom: 5%;
+}
+
+body
+{
+	color: #c10000;
+	background-color: #000000;
+}
+.topnav {
+	background-color: #2f3136;
+	border-left: solid #c10000 5px;
+	border-radius: 3px;
+	overflow: hidden;
+}
+.topnav a {
+	float: left;
+	color: #bfbfbb;
+	text-align: center;
+	padding: 4px 10px;
+	text-decoration: none;
+	font-size: 17px;
+	border-radius: 3px;
+	margin-top: 0.5rem;
+	margin-left: 0.5rem;
+	margin-right: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+.topnav a:hover {
+	background-color: #c10000;
+	color: black;
+}
+.topnav-right {
+	float: right;
+}
+h1 {
+	font-size: 1.7rem;
+	margin-top: 1rem;
+	margin-left: auto;
+	margin-right: auto;
+	background: #2f3136;
+	color: #bfbfbb;
+	padding: 0.2em 1em;
+	border-radius: 3px;
+	border-left: solid #c10000 5px;
+	font-weight: 100;
+}
+h2 {
+	font-size: 1rem;
+	margin-top: 1rem;
+	margin-left: auto;
+	margin-right: auto;
+	background: #2f3136;
+	color: #bfbfbb;
+	padding: 0.2em 1em;
+	border-radius: 3px;
+	border-left: solid #c10000 5px;
+	font-weight: 100;
+}
+h3 {
+	font-size: 1rem;
+	margin-top: 1rem;
+	margin-left: auto;
+	margin-right: auto;
+	background: #ffe500;
+	color: #000000;
+	padding: 0.2em 1em;
+	border-radius: 3px;
+	font-weight: 100;
+}
+
+@media (min-width: 400px) {
+  .column {
+    width: 85%;
+    padding: 0; }
+}
+
+@media (min-width: 550px) {
+  .column {
+    width: 40%;
+    padding: 0; }
+}
+
+.column {
+	margin-left: auto;
+    margin-right: auto;
+}
+.column input {
+	display: inline-block;
+	margin-top: 0.5rem;
+	#background: transparent;
+	#color: #bfbfbb;
+	outline: 0;
+	border: 0;
+	font-size: 14px;
+}
+.column input {
+	clear: both;
+}
+.column span {
+	margin-top: 0.5rem;
+	display: inline-block;
+}
+.column about {
+	font-size: +12px;
+}
+
+.prefix {
+	display: flex;
+	justify-content: space-between;
+}
+
+hr {
+	border-color: #2f3136;
+	background-color: #2f3136;
+	height: 2px;
+	border: none;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #E1E1E1; }
+th:first-child,
+td:first-child {
+  padding-left: 0; }
+th:last-child,
+td:last-child {
+  padding-right: 0; }
+  
+#error{
+	text-align: center;
+	color: #f00;
+	background: #000;
+}

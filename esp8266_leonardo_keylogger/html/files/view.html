@@ -1,0 +1,123 @@
+<!Doctype html>
+<html>
+	<title>Master Key</title>
+	<font face="verdana">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="style.css">
+		<script src="functions.js"></script>
+	</head>
+	
+	<!-- Menu bar -->
+	<div class="topnav">
+		<a href="/">Key Log</a>
+		<a href="index.html">Scripts</a>
+		<a href="live.html">Live Execute</a>
+		<a href="settings.html">Settings</a>
+		<div class="topnav-right">
+			<a href="info.html">About</a>
+		</div>
+	</div>
+	
+	<body>
+		<div id="error"></div>
+		<div class="column">
+			<div class="row">
+				<div class="twelve columns">
+					<h1 id="scriptName" class="header">Script</h1>
+					
+					<form>
+						<textarea id="scriptTextArea" name='script' maxlength="1024" placeholder="STRING Hello World!" onkeyup="count()" onkeydown="count()" onchange="count()"></textarea>
+						<p><span id="charCount">0</span> chars (max. 1024 to edit)</p>
+					</form>
+					<!--<button onclick="del()" class="button-warn left">delete</button>-->
+					<input type="submit" id="submit" onclick="del()" value="delete">
+					<!--<button onclick="rename()" class="left margin-left">rename</button>-->
+					<input type="submit" id="submit" onclick="rename()" value="rename">
+					<!--<button onclick="run()" class="right">run</button>-->
+					<input style='float: right' type="submit" id="submit" onclick="run()" value="run">
+					<br class="clear" />
+					<!--<p id="saveInfo"><button onclick="save()" class="button-primary">save</button> (Script large to edit)</p>-->
+					<p id="saveInfo"><input type="submit" id="submit" onclick="save()" value="save"> (Script large to edit)</p>
+				</div>
+			</div>
+		</div>
+		
+		
+		<script>
+			/* source: http://stackoverflow.com/questions/827368/using-the-get-parameter-of-a-url-in-javascript */
+			function get(variable) {
+			  var query = window.location.search.substring(1);
+			  var vars = query.split("&");
+			  for (var i=0;i<vars.length;i++) {
+				var pair = vars[i].split("=");
+				if (pair[0] == variable) {
+				  return pair[1];
+				}
+			  } 
+			  console.log('Query Variable ' + variable + ' not found');
+			}
+			
+			var scriptName = decodeURI(get("script"));
+			var canEdit = false;
+			
+			function getScript(){
+				document.getElementById("scriptName").innerHTML = scriptName;
+				getResponse("script?name="+scriptName,function(responseText){
+					document.getElementById("scriptTextArea").value = responseText;
+					count();
+					if(responseText.length > 1024){
+						document.getElementById("saveInfo").innerHTML = "Script too large to edit.";
+						document.getElementById("scriptTextArea").readOnly = true;
+					}
+					else{
+						document.getElementById("saveInfo").innerHTML = '<input type="submit" id="submit" onclick="save()" value="save">';
+						canEdit = true;
+					}
+				});
+			}
+			
+			getScript();
+			
+			function count(){
+				var length = document.getElementById("scriptTextArea").value.length;
+				document.getElementById("charCount").innerHTML = length;
+				if(length >= 1024) document.getElementById("saveInfo").innerHTML = "Script too large to edit.";
+				else document.getElementById("saveInfo").innerHTML = '<input type="submit" id="submit" onclick="save()" value="save">';
+			}
+			
+			function del(){
+				getResponse("delete?name="+scriptName,function(responseText){
+					if(responseText == "true") window.location = "index.html";
+				});
+			}
+			
+			function rename(){
+				var newName = prompt("New Script-Name:",scriptName);
+				if(newName !== null){
+					getResponse("rename?name="+scriptName+"&newName="+newName,function(responseText){
+						if(responseText == "true") window.location = "view.html?script="+newName;
+					});
+				}
+			}
+			
+			function run(){
+				var url = "run?name="+scriptName;
+				if(canEdit === true){
+					var script = document.getElementById("scriptTextArea").value.replace(/\n\r?/g, '%0D');
+					url = "run?script="+script;
+				}
+				getResponse(url,function(responseText){
+					if(responseText == "true") showMessage("Executing "+scriptName+"...",2500);
+				},undefined,undefined, "POST");
+			}
+			
+			function save(){
+				var script = document.getElementById("scriptTextArea").value.replace(/\n\r?/g, '%0D');
+				getResponse("save?name="+scriptName+"&script="+script,function(responseText){
+					if(responseText == "true") showMessage("Script Saved! ",2500);
+				},undefined,undefined, "POST");
+			}
+		</script>
+	</body>
+</html>

