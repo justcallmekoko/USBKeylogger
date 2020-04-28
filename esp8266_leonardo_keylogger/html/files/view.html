@@ -30,14 +30,10 @@
 						<textarea id="scriptTextArea" name='script' maxlength="1024" placeholder="STRING Hello World!" onkeyup="count()" onkeydown="count()" onchange="count()"></textarea>
 						<p><span id="charCount">0</span> chars (max. 1024 to edit)</p>
 					</form>
-					<!--<button onclick="del()" class="button-warn left">delete</button>-->
 					<input type="submit" id="submit" onclick="del()" value="delete">
-					<!--<button onclick="rename()" class="left margin-left">rename</button>-->
 					<input type="submit" id="submit" onclick="rename()" value="rename">
-					<!--<button onclick="run()" class="right">run</button>-->
 					<input style='float: right' type="submit" id="submit" onclick="run()" value="run">
 					<br class="clear" />
-					<!--<p id="saveInfo"><button onclick="save()" class="button-primary">save</button> (Script large to edit)</p>-->
 					<p id="saveInfo"><input type="submit" id="submit" onclick="save()" value="save"> (Script large to edit)</p>
 				</div>
 			</div>

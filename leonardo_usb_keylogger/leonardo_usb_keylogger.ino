@@ -71,6 +71,7 @@ class KbdRptParser : public KeyboardReportParser{
 };
 
 void KbdRptParser::OnKeyDown(uint8_t mod, uint8_t key){
+  digitalWrite(LED_BUILTIN, HIGH);
   int parsedKey = _parse(key);
   if(parsedKey == key){
     uint8_t c = OemToAscii(mod, key);
@@ -78,6 +79,7 @@ void KbdRptParser::OnKeyDown(uint8_t mod, uint8_t key){
     if(c != 0x20 && c != 0x00) _press(c);
     else _press(key);
   }else _press(parsedKey);
+  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void KbdRptParser::OnKeyUp(uint8_t mod, uint8_t key){
@@ -397,7 +399,8 @@ void setup()
 
   pinMode(LED_BUILTIN, OUTPUT);
 
-  digitalWrite(LED_BUILTIN, HIGH);
+  // Turn signal LED off
+  digitalWrite(LED_BUILTIN, LOW);
 
   //Serial1.println("\n\nLogging keys...\n");
 /*
