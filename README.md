@@ -1,7 +1,8 @@
 # Masterkey - USB WiFi Keylogger
-*A WiFi enabled USB Keylogger and Keystroke injection tool*
  
 <p align="center">
+  <i>A WiFi enabled USB Keylogger and Keystroke injection tool</i>
+  <br><br>
   <a href="https://github.com/justcallmekoko/USBKeylogger/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
   <a href="https://github.com/justcallmekoko/USBKeylogger/releases/latest"><img src="https://img.shields.io/github/downloads/justcallmekoko/USBKeylogger/total" alt="Downloads"/></a>
   <br>
