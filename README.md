@@ -1,5 +1,15 @@
 # USB WiFi Keylogger
- *A WiFi enabled USB Keylogger and Keystroke injection tool*
+*A WiFi enabled USB Keylogger and Keystroke injection tool*
+ 
+<p align="center">
+  <a href="https://github.com/justcallmekoko/USBKeylogger/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
+  <a href="https://github.com/justcallmekoko/USBKeylogger/releases/latest"><img src="https://img.shields.io/github/downloads/justcallmekoko/USBKeylogger/total" alt="Downloads"/></a>
+  <br>
+  <a href="https://twitter.com/intent/follow?screen_name=jcmkyoutube"><img src="https://img.shields.io/twitter/follow/jcmkyoutube?style=social&logo=twitter" alt="Twitter"></a>
+  <a href="https://www.instagram.com/just.call.me.koko"><img src="https://img.shields.io/badge/Follow%20Me-Instagram-orange" alt="Instagram"/></a>
+  <br><br>
+  <a href="https://www.tindie.com/products/justcallmekoko/masterkey-wifi-usb-keylogger/"><img src="https://d2ss6ovg47m0r5.cloudfront.net/badges/tindie-larges.png" alt="I sell on Tindie" width="200" height="104"></a>
+</p>
 
 # Table of Contentiousness
 - [About](#about)
