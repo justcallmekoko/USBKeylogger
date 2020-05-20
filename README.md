@@ -36,8 +36,34 @@ Key presses are stored in the file system of the ESP8266 which can be accessed o
 Logged key presses will be displayed within the text box on that page. At the bottom of the page is a `clear` button. This button will clear the keylog in the event the user wants to start a fresh log for any reason.
 
 ## Keystroke Injection
+Keystroke injection attacks can me executed by navigating to the `Live Execute` tab at the top of the screen. There you can write, run, and save keystroke injection scripts written in [ducky script](https://docs.hak5.org/hc/en-us/articles/360010555153-Ducky-Script-the-USB-Rubber-Ducky-language).  
+If you want to run a script you have written and saved previously, you can navigate to the `Scripts` tab and select any script from the list of scripts displayed on the screen. You can either click on the script directly to edit, rename, or run the script or you can just click the run button to immediately run the script.  
+You can also upload prewritten scripts to be executed on Masterkey.
+
 ## Admin Settings
+These settings are responsible for securing the wireless access point of Masterkey and tailoring the appearance to your liking. These settings can be found by navigating to the `Settings` tab. Ther you will be able to adjust the following settings:
+1. Access Point SSID: The name of the access point that will appear when searching through WiFi networks
+2. Access Point Password: The password that will be required when connecting to the Masterkey access point
+3. Channel: The channel the access point will be broadcasted on
+4. Hidden: Boolean which will tell Masterkey whether or not to broadcast its access point
+
+Once the settings have been changed, you will be required to hit `save` and `restart` for the changes to take effect.
 
 # Updating Firmware
+As new firmware is released for the Masterkey, it will be left to the discretion of the user whether or not they would like to update their device. There are two phases to updating Masterkey described here. You may be required to update either the ATMEGA32U4 or the ESP8266. It is more likely the ESP8266 will be updated since most of the functionality resides there including the user interface.
+
 ## Updating ATMEGA32U4
+To update the ATMEGA32U4, you will be required to clone this repository, build the project, and upload it directly to the microcontroller using the Arduino IDE. These steps will be explained here.  
+
+_to-do_
+
 ## Updating ESP8266
+Updating the ESP8266 occurs over the air using [ElegantOTA](https://github.com/ayushsharma82/ElegantOTA). 
+1. Download the [latest release](https://github.com/justcallmekoko/USBKeylogger/releases/latest)
+2. Connect to the Masterkey access point
+3. Access the web page via web browser at `http://192.168.4.1`
+4. Navigate to the `About` tab
+5. Click on the `Update` button
+6. Select the bin file you downloaded from releases and click `Upload`
+
+The ESP8266 will automatically restart once the update has been applied and you will be required to reconnect to it if you wish to continue to use Masterkey.
