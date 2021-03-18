@@ -26,6 +26,7 @@ Catch my live stream on [Twitch](https://www.twitch.tv/willstunforfood) where I 
   - [Keystroke Injection](#keystroke-injection)
   - [Admin Settings](#admin-settings)
 - [Updating Firmware](#updating-firmware)
+  - [Bootloader](#bootloader)
   - [Updating ATMEGA32U4](#updating-atmega32u4)
   - [Updating ESP8266](#updating-esp8266)
 
@@ -58,6 +59,10 @@ Once the settings have been changed, you will be required to hit `save` and `res
 
 # Updating Firmware
 As new firmware is released for the Masterkey, it will be left to the discretion of the user whether or not they would like to update their device. There are two phases to updating Masterkey described here. You may be required to update either the ATMEGA32U4 or the ESP8266. It is more likely the ESP8266 will be updated since most of the functionality resides there including the user interface.
+
+## Bootloader
+If you know what you're doing, you will know how to use this.  
+'avrdude -c usbasp -p m32u4 -b 115200 -v -e -U lfuse:w:0xFF:m -U hfuse:w:0xD8:m -U efuse:w:0xCB:m -U lock:w:0x2F:m -U flash:w:Caterina-A-Star.hex'
 
 ## Updating ATMEGA32U4
 To update the ATMEGA32U4, you will be required to clone this repository, build the project, and upload it directly to the microcontroller using the Arduino IDE. These steps will be explained here.  
