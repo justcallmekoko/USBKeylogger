@@ -62,7 +62,7 @@ As new firmware is released for the Masterkey, it will be left to the discretion
 
 ## Bootloader
 If you know what you're doing, you will know how to use this.  
-'avrdude -c usbasp -p m32u4 -b 115200 -v -e -U lfuse:w:0xFF:m -U hfuse:w:0xD8:m -U efuse:w:0xCB:m -U lock:w:0x2F:m -U flash:w:Caterina-A-Star.hex'
+`avrdude -c usbasp -p m32u4 -b 115200 -v -e -U lfuse:w:0xFF:m -U hfuse:w:0xD8:m -U efuse:w:0xCB:m -U lock:w:0x2F:m -U flash:w:Caterina-A-Star.hex`
 
 ## Updating ATMEGA32U4
 To update the ATMEGA32U4, you will be required to clone this repository, build the project, and upload it directly to the microcontroller using the Arduino IDE. These steps will be explained here.  
